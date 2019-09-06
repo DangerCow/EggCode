@@ -10,7 +10,7 @@
 start.end
 
 func test
-	a = math(5 + 7)
+	a = math(a + 26)
 
 	print(a)
 test.end

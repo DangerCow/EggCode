@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace EggCode
 {
@@ -11,12 +6,14 @@ namespace EggCode
     {
         public static List<EggCodeVoid> eggCodeVoids = new List<EggCodeVoid>();
         public static EggCodeParser parser = new EggCodeParser();
-        public static EggCodeStack stack = new EggCodeStack();
+        public static Dictionary<string, string> stack = new Dictionary<string, string>();
 
         public static EggCodeVoid start;
 
         public void Run(string file)
         {
+            //read file
+
             string[] lines = System.IO.File.ReadAllLines(file);
 
             //remove tabs and spaces from file
@@ -56,10 +53,15 @@ namespace EggCode
         {
             if (line.StartsWith("func"))
             {
+                //create new void with name
+
                 EggCodeVoid tempVoid = new EggCodeVoid
                 {
                     name = line.Split(' ')[1]
                 };
+
+                //start the void so it can find the code inside of the void
+
                 tempVoid.Start(i);
 
                 if (tempVoid.name == "start") { start = tempVoid; }
@@ -68,6 +70,8 @@ namespace EggCode
             }
             if (line.EndsWith(".end"))
             {
+                //find void ended then end the void then save the code
+
                 foreach(EggCodeVoid ecv in eggCodeVoids)
                 {
                     if (line.StartsWith(ecv.name))

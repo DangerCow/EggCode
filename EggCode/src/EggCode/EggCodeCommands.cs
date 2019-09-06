@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EggCode
 {
@@ -22,13 +17,17 @@ namespace EggCode
             }
         }
 
-        public static void declairVarible(string line)
+        //called when varible is being declared
+
+        public static void declareVarible(string line)
         {
             string[] args = line.Split(new[] { " = " }, StringSplitOptions.None);
 
             args[1] = EggCodeParser.ParseInput(args[1]);
 
-            try { EggCodeMain.stack.add(args[0], args[1]); } catch { EggCodeMain.stack.stack[args[0]] = args[1]; }
+            //try to create a varible or overwrite a varible
+
+            try { EggCodeMain.stack.Add(args[0], args[1]); } catch { EggCodeMain.stack[args[0]] = args[1]; }
         }
     }
 }
