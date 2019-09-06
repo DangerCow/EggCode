@@ -46,9 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EggCode\EggCode.cs" />
-    <Compile Include="EggCode\EggCodeTypes.cs" />
-    <Compile Include="TestProgram.cs" />
+    <Compile Include="src\EggCode\EggCode.cs" />
+    <Compile Include="src\EggCode\EggCodeTypes.cs" />
+    <Compile Include="src\TestProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
