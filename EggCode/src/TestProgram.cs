@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EggCode;
 
-namespace EggCode
+namespace aaaaa
 {
     class TestProgram
     {
         static void Main(string[] args)
         {
-            EggCode ec = new EggCode();
+            EggCodeMain ec = new EggCodeMain();
             try { ec.Run(args[0]); } catch
             {
                 Console.Write("file: ");

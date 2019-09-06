@@ -1,12 +1,16 @@
-﻿new void[start]
-	
-	openVoid[egg]
-	print[hello!]
+﻿func start
+
+	a = 5
+
+	test.start
+
+	print("yup")
+	print(a)
 
 start.end
 
-new void[egg]
-	new var[test] = 5
-	new var[test2] = math(+,test,5)
-	print[test2]
-egg.end
+func test
+	a = math(5 + 7)
+
+	print(a)
+test.end
