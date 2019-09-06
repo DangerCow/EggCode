@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace EggCode
 {
@@ -16,7 +17,7 @@ namespace EggCode
 
             string[] lines = System.IO.File.ReadAllLines(file);
 
-            //remove tabs and spaces from file
+            //remove tabs, spaces and comments from file
             int i = 0;
 
             foreach (string forLine in lines)
@@ -26,6 +27,11 @@ namespace EggCode
                 while (line.IndexOf("  ") >= 0)
                 {
                     line = line.Replace("  ", " ");
+                }
+
+                if (line.StartsWith("//"))
+                {
+                    line = "";
                 }
 
                 lines[i] = line;
@@ -51,7 +57,7 @@ namespace EggCode
 
         private void CreateVoids(string line, string[] lines, int i)
         {
-            if (line.StartsWith("func"))
+            if (line.StartsWith("func") && !line.EndsWith(".start") && !line.EndsWith(".end"))
             {
                 //create new void with name
 

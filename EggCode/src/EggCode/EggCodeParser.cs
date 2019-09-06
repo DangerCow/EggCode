@@ -30,7 +30,7 @@ namespace EggCode
             else if (input.StartsWith("math"))
             {
                 string[] args = input.Replace("math(", "").Replace(")", "").Split(' ');
-                int i_return = 0;
+                float i_return = 0;
 
                 //reparse the arguments so varibles and eaven the math command in the future can be passed
 
@@ -38,13 +38,13 @@ namespace EggCode
                 args[2] = ParseInput(args[2]);
 
                 if (args[1] == "+")
-                { i_return = int.Parse(args[0]) + int.Parse(args[2]); }
+                { i_return = float.Parse(args[0]) + float.Parse(args[2]); }
                 if (args[1] == "-")
-                { i_return = int.Parse(args[0]) - int.Parse(args[2]); }
+                { i_return = float.Parse(args[0]) - float.Parse(args[2]); }
                 if (args[1] == "*")
-                { i_return = int.Parse(args[0]) * int.Parse(args[2]); }
+                { i_return = float.Parse(args[0]) * float.Parse(args[2]); }
                 if (args[1] == "/")
-                { i_return = int.Parse(args[0]) / int.Parse(args[2]); }
+                { i_return = float.Parse(args[0]) / float.Parse(args[2]); }
 
                 return i_return.ToString();
             }
