@@ -1,0 +1,12 @@
+﻿new void[start]
+	
+	openVoid[egg]
+	print[hello!]
+
+start.end
+
+new void[egg]
+	new var[test] = 5
+	new var[test2] = math(+,test,5)
+	print[test2]
+egg.end
