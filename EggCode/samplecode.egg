@@ -47,6 +47,13 @@ func function2
 		print("you will never see this string!!!!!!")
 	endif
 
+	//if statment flag types
+	a == b returns true if a and b have the same value
+	a > b returns true if a's value is greater then b's
+	a < b returns true if a's value is less then b's
+	a >= returns true if a's value is greater then or equal to b's
+	a <= returns true if a's value is less then or equal to b's
+
 function2.end
 
 //expected output of this file is
