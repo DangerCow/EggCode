@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System;
 
 namespace EggCode
 {
-
     class EggCodeVoid
     {
         public string name;
@@ -16,7 +17,7 @@ namespace EggCode
 
         //get lines of code inbetween start and end then save them to code
 
-        public void Create(string[]lines){int i=start;while(i<end){code.Add(lines[i]);i += 1;}}
+        public void Create(string[]lines){int i=start;while(i<end - 1){code.Add(lines[i]);i += 1;}}
 
         public void Run()
         {

@@ -18,6 +18,7 @@ namespace aaaaa
                 string file = Console.ReadLine();
 
                 if (file == "s") { ec.Run("samplecode.egg"); }
+                else if (file == "d") { ec.Run("devcode.egg"); }
                 else { ec.Run(file); }
             }
 

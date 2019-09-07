@@ -9,6 +9,8 @@ func [function name] - creates/starts new function called [function name]
 [function name].end - ends [function name]
 [function name].start - runs/starts [function name]
 
+if([flag]) & endif - if the flag is true run the code inbetween if and endif 
+
 print([input]) - outputs [input]
 
 [a] = [b] - creates new varible named [a] with tthe value [b]
@@ -21,6 +23,6 @@ print("[string]") - returns [string]
 
 ### Notes
 
-* math() dose not work as an input with print() currently
+* if statments sadly can not contain other if statments
 
 # For more details about EggCode's syntax look in EggCode/samplecode.egg

@@ -6,6 +6,9 @@ namespace EggCode
     class EggCodeMain
     {
         public static List<EggCodeVoid> eggCodeVoids = new List<EggCodeVoid>();
+
+        public static string[] lines;
+
         public static EggCodeParser parser = new EggCodeParser();
         public static Dictionary<string, string> stack = new Dictionary<string, string>();
 
@@ -15,7 +18,7 @@ namespace EggCode
         {
             //read file
 
-            string[] lines = System.IO.File.ReadAllLines(file);
+            lines = System.IO.File.ReadAllLines(file);
 
             //remove tabs, spaces and comments from file
             int i = 0;
@@ -38,7 +41,6 @@ namespace EggCode
 
                 i += 1;
             }
-
             //create voids
 
             i = 0;
@@ -46,7 +48,6 @@ namespace EggCode
             foreach (string line in lines)
             {
                 CreateVoids(line, lines, i);
-
                 i += 1;
             }
 

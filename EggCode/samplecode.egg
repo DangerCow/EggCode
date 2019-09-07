@@ -1,4 +1,6 @@
-﻿//when you have a function called start the program will run it when ready
+﻿//lines starting with "//" (comments) will not be parsed
+
+//when you have a function called start the program will run it when ready
 
 func start
 
@@ -17,6 +19,7 @@ func start
 	//when another function starts all the code in that function will be ran until continuing the first function
 
 	print("hello!")
+	print(math(10 + 10))
 
 start.end
 
@@ -30,7 +33,19 @@ func function2
 	//all varibles are global
 	print(a)
 	print(b)
-	print(c)
+
+	//code in this if statment if the flag is true
+	//the flag in this statment is "a == 5"
+	//so if a's value is 5 it will print c
+	//note: sadly if statments can not contain if statments in them (possibly changeable in the future?)
+
+	if (a == 5)
+		print(c)
+	endif
+
+	if (a == 2)
+		print("you will never see this string!!!!!!")
+	endif
 
 function2.end
 
@@ -39,3 +54,4 @@ function2.end
 10
 10
 hello!
+20

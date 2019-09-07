@@ -6,7 +6,7 @@ namespace EggCode
     {
         public static void print(string line)
         {
-            Console.WriteLine(EggCodeParser.ParseInput(EggCodeMain.Between("(", line, ")")));
+            Console.WriteLine(EggCodeParser.ParseInput(EggCodeParser.AdvancedBetween('(', line, ')')));
         }
 
         public static void startFunction(string line)

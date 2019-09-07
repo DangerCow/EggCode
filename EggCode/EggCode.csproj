@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="src\EggCode\EggCode.cs" />
     <Compile Include="src\EggCode\EggCodeCommands.cs" />
+    <Compile Include="src\EggCode\EggCodeCShapTools.cs" />
     <Compile Include="src\EggCode\EggCodeParser.cs" />
     <Compile Include="src\EggCode\EggCodeTypes.cs" />
     <Compile Include="src\TestProgram.cs" />
@@ -55,9 +56,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="devcode.egg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="samplecode.egg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

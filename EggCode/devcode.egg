@@ -1,0 +1,11 @@
+﻿func start
+	a = 5
+
+	if (a == 5)
+		
+	endif
+
+	if (a == 6)
+		print(a)
+	endif
+start.end
