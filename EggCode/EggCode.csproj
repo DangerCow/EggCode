@@ -48,7 +48,6 @@
   <ItemGroup>
     <Compile Include="src\EggCode\EggCode.cs" />
     <Compile Include="src\EggCode\EggCodeCommands.cs" />
-    <Compile Include="src\EggCode\EggCodeCShapTools.cs" />
     <Compile Include="src\EggCode\EggCodeParser.cs" />
     <Compile Include="src\EggCode\EggCodeTypes.cs" />
     <Compile Include="src\TestProgram.cs" />

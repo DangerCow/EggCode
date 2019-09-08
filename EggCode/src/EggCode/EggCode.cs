@@ -6,11 +6,11 @@ namespace EggCode
     class EggCodeMain
     {
         public static List<EggCodeVoid> eggCodeVoids = new List<EggCodeVoid>();
+        public static List<EggCodeVarible> eggCodeVaribles = new List<EggCodeVarible>();
 
         public static string[] lines;
 
         public static EggCodeParser parser = new EggCodeParser();
-        public static Dictionary<string, string> stack = new Dictionary<string, string>();
 
         public static EggCodeVoid start;
 

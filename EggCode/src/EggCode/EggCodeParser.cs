@@ -1,6 +1,7 @@
 ﻿using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace EggCode
@@ -23,7 +24,7 @@ namespace EggCode
             if (line.StartsWith("if ("))
             {
                 parsing_if = true;
-                if(EggCodeCShapTools.Eval(AdvancedBetween('(', line, ')'))) { parsing_if_true = true; } else { parsing_if_true = false; }
+                if(Eval(AdvancedBetween('(', line, ')'))) { parsing_if_true = true; } else { parsing_if_true = false; }
             }
             else if (line.StartsWith("endif"))
             {
@@ -38,40 +39,51 @@ namespace EggCode
             }
         }
 
-        public static string ParseInput(string input)
+        public static bool Eval(string flag)
+        {
+            string[] args = flag.Split(' ');
+
+            if (args[1] == "==")
+            {
+                if ((string)ParseInput(args[0]) == (string)ParseInput(args[2])) { return true; }
+            }
+            else if (args[1] == ">")
+            {
+                if ((float)ParseInput(args[0]) > (float)ParseInput(args[2])) { return true; }
+            }
+            else if (args[1] == "<")
+            {
+                if ((float)ParseInput(args[0]) < (float)ParseInput(args[2])) { return true; }
+            }
+            else if (args[1] == ">=")
+            {
+                if ((float)ParseInput(args[0]) >= (float)ParseInput(args[2])) { return true; }
+            }
+            else if (args[1] == "<=")
+            {
+                if ((float)ParseInput(args[0]) <= (float)ParseInput(args[2])) { return true; }
+            }
+
+            return false;
+        }
+
+        public static object ParseInput(string input)
         {
             //get string
 
             if (input.StartsWith("\"")) { return EggCodeMain.Between("\"", input, "\""); }
 
-            //get math command
+            //get input commands
 
-            else if (input.StartsWith("math"))
+            if (input.StartsWith("math"))
             {
-                string[] args = AdvancedBetween('(', input, ')').Split(' ');
-                float i_return = 0;
-
-                //reparse the arguments so varibles and eaven the math command in the future can be passed
-
-                args[0] = ParseInput(args[0]);
-                args[2] = ParseInput(args[2]);
-
-                if (args[1] == "+")
-                { i_return = float.Parse(args[0]) + float.Parse(args[2]); }
-                if (args[1] == "-")
-                { i_return = float.Parse(args[0]) - float.Parse(args[2]); }
-                if (args[1] == "*")
-                { i_return = float.Parse(args[0]) * float.Parse(args[2]); }
-                if (args[1] == "/")
-                { i_return = float.Parse(args[0]) / float.Parse(args[2]); }
-
-                return i_return.ToString();
+                return EggCodeCommands.math(input);
             }
 
             //if there isent a string or a math command try to find a verible with the name (input)
             //but if not found just return back input like a string
 
-            else { try { return EggCodeMain.stack[input]; } catch { return input; } }
+            else { try { return EggCodeVarible.FindVarible(input).value; } catch { return input; } }
         }
 
         public static string AdvancedBetween(char s_in, string s_str, char s_out)

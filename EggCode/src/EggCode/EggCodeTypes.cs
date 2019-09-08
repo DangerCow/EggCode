@@ -27,4 +27,45 @@ namespace EggCode
             }
         }
     }
+
+    class EggCodeVarible
+    {
+        public string name;
+        public object value;
+
+        public EggCodeVarible(string name, object value)
+        {
+            this.name = name;
+            this.value = value;
+        }
+
+        public static EggCodeVarible FindVarible(string name)
+        {
+            foreach(EggCodeVarible v in EggCodeMain.eggCodeVaribles)
+            {
+                if (v.name == name)
+                {
+                    return v;
+                }
+            }
+
+            return null;
+        }
+
+        public static int FindVaribleIndex(string name)
+        {
+            int i = 0;
+
+            foreach (EggCodeVarible v in EggCodeMain.eggCodeVaribles)
+            {
+                if (v.name == name)
+                {
+                    return i;
+                }
+                i++;
+            }
+
+            return -1;
+        }
+    }
 }
