@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B78749A0-E3FA-4107-9174-58A05362C871}</ProjectGuid>
+    <ProjectGuid>{BD0A49BB-34EF-409D-93D9-EB504945C63B}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>EggCode</RootNamespace>
     <AssemblyName>EggCode</AssemblyName>
@@ -32,9 +32,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -46,19 +43,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\EggCode\EggCode.cs" />
-    <Compile Include="src\EggCode\EggCodeCommands.cs" />
-    <Compile Include="src\EggCode\EggCodeParser.cs" />
-    <Compile Include="src\EggCode\EggCodeTypes.cs" />
-    <Compile Include="src\TestProgram.cs" />
+    <Compile Include="src\EggCode.cs" />
+    <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="devcode.egg">
+    <None Include="TestProject\test.egg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="samplecode.egg">
+    <None Include="TestProject\.eggpro">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

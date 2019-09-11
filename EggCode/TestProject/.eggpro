@@ -1,0 +1,3 @@
+﻿addFile(test.egg)
+
+defualt = test.egg

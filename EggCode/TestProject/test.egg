@@ -1,0 +1,3 @@
+﻿func start
+	print(input(":"))
+start.end
