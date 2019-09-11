@@ -138,7 +138,7 @@ namespace DCS
 
         private static void FindVoids(string line, int i, string[] lines, bool DefaultFile)
         {
-            if (line.StartsWith("func"))
+            if (line.StartsWith("func") && !line.EndsWith(".start") && !line.EndsWith(".end"))
             {
                 EggCodeTypeVoid TempVoid = new EggCodeTypeVoid
                 {

@@ -1,0 +1,61 @@
+﻿//lines starting with "//" (comments) will not be parsed
+
+//when you have a function called start the program will run it when ready
+
+func start
+
+	//all varible declarations need to be formated just like "a = b" or else the parser wont see it
+	a = 5 
+
+	//on inputs like print([input here]) or b = [input here] you can add the math command
+
+	b = math(a + 5)
+	c = b
+
+	//you can start another function by putting .start after a function name
+
+	function2.start
+
+	//when another function starts all the code in that function will be ran until continuing the first function
+
+	print("hello!")
+	print(math(10 + 10))
+
+start.end
+
+//you can name any function anything you want
+
+func function2
+
+	//code in this function will not be run untill called
+
+	//on inputs like print([input here]) or b = [input here] you can add a varible
+	//all varibles are global
+	print(a)
+	print(b)
+
+	//code in this if statment if the flag is true
+	//the flag in this statment is "a == 5"
+	//if the flag is false it will run "skip 1" witch will skip 1 line of code
+	//so if a's value is 5 it will print c
+
+	if (a == 5) else (skip 1)
+		print(c)
+
+	if (a == 2) else (skip 1)
+		print("you will never see this string!!!!!!")
+
+	//if statment flag types
+	a == b returns true if a and b have the same value
+	a > b returns true if a's value is greater then b's
+	a < b returns true if a's value is less then b's
+	a >= returns true if a's value is greater then or equal to b's
+	a <= returns true if a's value is less then or equal to b's
+
+function2.end
+
+//expected output of this file is
+5
+10
+hello!
+20

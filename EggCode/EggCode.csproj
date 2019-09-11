@@ -49,6 +49,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="samplecode.egg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestProject\test.egg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
