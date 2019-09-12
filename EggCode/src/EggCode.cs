@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using DCS.Util;
 
@@ -12,8 +9,10 @@ namespace DCS
     {
         public enum CodeType { Project, File };
         private static List<EggCodeTypeVoid> eggCodeVoids = new List<EggCodeTypeVoid>();
-        private static List<EggCodeTypeVarible> eggCodeVaribles = new List<EggCodeTypeVarible>();
+        private static List<EggCodeTypeVarible> eggCodeGlobalVaribles = new List<EggCodeTypeVarible>();
         private static EggCodeTypeVoid startVoid = null;
+
+        private static EggCodeTypeVoid CurrentlyRunning = null;
 
         public static void Run(string file, CodeType codeType)
         {
@@ -153,6 +152,16 @@ namespace DCS
 
                 eggCodeVoids.Add(TempVoid);
             }
+            else if (line.StartsWith("void") && line.EndsWith(")"))
+            {
+                EggCodeTypeVoid TempVoid = new EggCodeTypeVoid
+                {
+                    name = line.StringSplit("void ")[1].Split('(')[0]
+                };
+                TempVoid.StartWithPrams(i, line.AdvancedBetween('(', ')'));
+
+                eggCodeVoids.Add(TempVoid);
+            }
             else if (line.EndsWith(".end"))
             {
                 foreach(EggCodeTypeVoid ecv in eggCodeVoids)
@@ -160,6 +169,7 @@ namespace DCS
                     if (line.StringSplit(".end")[0] == ecv.name)
                     {
                         ecv.End(i);
+
                         ecv.Create(lines);
                     }
                 }
@@ -174,6 +184,7 @@ namespace DCS
             {
                 if (line.StartsWith("print")) { EggCodeCommands.Print(line); }
                 else if (line.EndsWith(".start")) { EggCodeCommands.StartFunc(line); }
+                else if (line.Contains(".start") && line.EndsWith(")")) { EggCodeCommands.StartFuncWithPrams(line); }
                 else if (line.StartsWith("skip")) { EggCodeCommands.Skip(line); }
                 else if (line.StartsWith("input")) { EggCodeCommands.Input(line); }
 
@@ -190,9 +201,14 @@ namespace DCS
 
                 //expression to find a varible being declared
 
-                else if (line.Contains(" = ") && !line.Split(new[] { " = " }, StringSplitOptions.None)[0].Contains(" "))
+                else if (line.Contains(" = ") && !line.Split(new[] { " = " }, StringSplitOptions.None)[0].Contains(" ") && !line.StartsWith("(private)"))
                 {
                     EggCodeCommands.DeclareVarible(line);
+                }
+
+                else if (line.Contains(" = ") && !line.Split(new[] { " = " }, StringSplitOptions.None)[0].Contains(" ") && line.StartsWith("(private)"))
+                {
+                    EggCodeCommands.DeclarePrivateVarible(line);
                 }
             }
 
@@ -211,36 +227,61 @@ namespace DCS
                     return EggCodeCommands.Math(input);
                 }
 
-                //if no other input method is found try to return varible
-                else { try { return EggCodeTypeVarible.FindVarible(input).value; } catch { return input; } }
+                //if no other input method is found try to return a private varible but if there is no private varible try to return a global one
+                else
+                {
+                    try
+                    {
+                        try
+                        {
+                            return CurrentlyRunning.FindVarible(input).value;
+                        }
+                        catch
+                        {
+                            return EggCodeTypeVarible.FindVarible(input).value;
+                        }
+                    }
+                    catch
+                    {
+                        return input;
+                    }
+                }
             }
 
             public static bool Eval(string flag)
             {
-                string[] args = flag.Split(' ');
+                try
+                {
+                    string[] args = flag.Split(' ');
 
-                if (args[1] == "==")
-                {
-                    if ((string)ParseInput(args[0]) == (string)ParseInput(args[2])) { return true; }
-                }
-                else if (args[1] == ">")
-                {
-                    if ((float)ParseInput(args[0]) > (float)ParseInput(args[2])) { return true; }
-                }
-                else if (args[1] == "<")
-                {
-                    if ((float)ParseInput(args[0]) < (float)ParseInput(args[2])) { return true; }
-                }
-                else if (args[1] == ">=")
-                {
-                    if ((float)ParseInput(args[0]) >= (float)ParseInput(args[2])) { return true; }
-                }
-                else if (args[1] == "<=")
-                {
-                    if ((float)ParseInput(args[0]) <= (float)ParseInput(args[2])) { return true; }
+                    if (args[1] == "==")
+                    {
+                        if ((string)ParseInput(args[0]) == (string)ParseInput(args[2])) { return true; }
+                    }
+                    else if (args[1] == ">")
+                    {
+                        if ((float)ParseInput(args[0]) > (float)ParseInput(args[2])) { return true; }
+                    }
+                    else if (args[1] == "<")
+                    {
+                        if ((float)ParseInput(args[0]) < (float)ParseInput(args[2])) { return true; }
+                    }
+                    else if (args[1] == ">=")
+                    {
+                        if ((float)ParseInput(args[0]) >= (float)ParseInput(args[2])) { return true; }
+                    }
+                    else if (args[1] == "<=")
+                    {
+                        if ((float)ParseInput(args[0]) <= (float)ParseInput(args[2])) { return true; }
+                    }
+
+                    return false;
                 }
 
-                return false;
+                catch
+                {
+                    throw new Exception("If statment not correct format");
+                }
             }
         }
 
@@ -260,6 +301,16 @@ namespace DCS
                     }
                 }
             }
+            public static void StartFuncWithPrams(string line)
+            {
+                foreach (EggCodeTypeVoid ecv in eggCodeVoids)
+                {
+                    if (ecv.name == line.StringSplit(".start")[0])
+                    {
+                        ecv.RunWithPrams(line.AdvancedBetween('(', ')'));
+                    }
+                }
+            }
             public static void Skip(string line)
             {
                 int skipAmount = int.Parse(line.StringSplit("skip ")[1]);
@@ -275,34 +326,51 @@ namespace DCS
 
                 if (EggCodeTypeVarible.FindVaribleIndex(args[0]) == -1)
                 {
-                    eggCodeVaribles.Add(var);
+                    eggCodeGlobalVaribles.Add(var);
                 }
                 else
                 {
-                    eggCodeVaribles[EggCodeTypeVarible.FindVaribleIndex(args[0])] = var;
+                    eggCodeGlobalVaribles[EggCodeTypeVarible.FindVaribleIndex(args[0])] = var;
+                }
+            }
+            public static void DeclarePrivateVarible(string line)
+            {
+                string[] args = line.Replace("(private)", "").StringSplit(" = ");
+                args[1] = EggCodeParser.ParseInput(args[1]).ToString();
+
+                EggCodeTypeVarible var = new EggCodeTypeVarible(args[0], args[1]);
+
+                if (CurrentlyRunning.FindVarible(args[0]) == null)
+                {
+                    CurrentlyRunning.privateVaribles.Add(var);
+                }
+                else
+                {
+                    CurrentlyRunning.privateVaribles[CurrentlyRunning.FindVaribleIndex(args[0])] = var;
                 }
             }
 
             public static float Math(string input)
             {
-                string[] args = input.AdvancedBetween('(', ')').Split(' ');
-                float i_return = 0;
 
-                //reparse the arguments so varibles and eaven the math command in the future can be passed
+                    string[] args = input.AdvancedBetween('(', ')').Split(' ');
+                    float i_return = 0;
 
-                args[0] = (string)EggCodeParser.ParseInput(args[0]);
-                args[2] = (string)EggCodeParser.ParseInput(args[2]);
+                    //reparse the arguments so varibles and eaven the math command in the future can be passed
 
-                if (args[1] == "+")
-                { i_return = float.Parse(args[0]) + float.Parse(args[2]); }
-                if (args[1] == "-")
-                { i_return = float.Parse(args[0]) - float.Parse(args[2]); }
-                if (args[1] == "*")
-                { i_return = float.Parse(args[0]) * float.Parse(args[2]); }
-                if (args[1] == "/")
-                { i_return = float.Parse(args[0]) / float.Parse(args[2]); }
+                    args[0] = (string)EggCodeParser.ParseInput(args[0]);
+                    args[2] = (string)EggCodeParser.ParseInput(args[2]);
 
-                return i_return;
+                    if (args[1] == "+")
+                    { i_return = float.Parse(args[0]) + float.Parse(args[2]); }
+                    if (args[1] == "-")
+                    { i_return = float.Parse(args[0]) - float.Parse(args[2]); }
+                    if (args[1] == "*")
+                    { i_return = float.Parse(args[0]) * float.Parse(args[2]); }
+                    if (args[1] == "/")
+                    { i_return = float.Parse(args[0]) / float.Parse(args[2]); }
+
+                    return i_return;
             }
 
             internal static void Input(string line)
@@ -327,7 +395,7 @@ namespace DCS
             {
                 int i = 0;
 
-                foreach (EggCodeTypeVarible v in eggCodeVaribles)
+                foreach (EggCodeTypeVarible v in eggCodeGlobalVaribles)
                 {
                     if (v.name == name)
                     {
@@ -341,7 +409,7 @@ namespace DCS
 
             public static EggCodeTypeVarible FindVarible(string name)
             {
-                foreach (EggCodeTypeVarible v in eggCodeVaribles)
+                foreach (EggCodeTypeVarible v in eggCodeGlobalVaribles)
                 {
                     if (v.name == name)
                     {
@@ -358,18 +426,75 @@ namespace DCS
             public string name;
             private List<string> code = new List<string>();
 
+            public List<EggCodeTypeVarible> privateVaribles = new List<EggCodeTypeVarible>();
+
             private int start;
             private int end;
+            private string prams_string;
 
             public void Start(int i) { start = i; }
+            public void StartWithPrams(int i, string pram) { start = i; prams_string = pram; }
             public void End(int i) { end = i; }
 
             //get lines of code inbetween start and end then save them to code
 
             public void Create(string[] lines) { int i = start; while (i < end) { code.Add(lines[i]); i += 1; } }
 
+            public EggCodeTypeVarible FindVarible(string name)
+            {
+                foreach (EggCodeTypeVarible v in privateVaribles)
+                {
+                    if (v.name == name)
+                    {
+                        return v;
+                    }
+                }
+
+                return null;
+            }
+            public int FindVaribleIndex(string name)
+            {
+                int i = 0;
+
+                foreach (EggCodeTypeVarible v in privateVaribles)
+                {
+                    if (v.name == name)
+                    {
+                        return i;
+                    }
+
+                    i++;
+                }
+
+                return -1;
+            }
+
             public void Run()
             {
+                CurrentlyRunning = this;
+
+                foreach (string line in code)
+                {
+                    if (EggCodeParser.skip == 0) { EggCodeParser.ParseLine(line); }
+                    else if (EggCodeParser.skip != 0) { EggCodeParser.skip -= 1; }
+                }
+            }
+            public void RunWithPrams(string pramCalls)
+            {
+                CurrentlyRunning = this;
+                int i = 0;
+
+                foreach(string pram in prams_string.StringSplit(", "))
+                {
+                    string s_pram = (string)EggCodeParser.ParseInput(pram);
+                    object s_pramValue = EggCodeParser.ParseInput(pramCalls.StringSplit(", ")[i]);
+
+                    EggCodeTypeVarible temp = new EggCodeTypeVarible(s_pram, s_pramValue);
+                    privateVaribles.Add(temp);
+
+                    i++;
+                }
+
                 foreach (string line in code)
                 {
                     if (EggCodeParser.skip == 0) { EggCodeParser.ParseLine(line); }

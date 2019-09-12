@@ -5,6 +5,7 @@
 func start
 
 	//all varible declarations need to be formated just like "a = b" or else the parser wont see it
+	//you can also add (private) before declaring a varible to make it only work on the function like (private)a = 5
 	a = 5 
 
 	//on inputs like print([input here]) or b = [input here] you can add the math command
@@ -52,10 +53,19 @@ func function2
 	a >= returns true if a's value is greater then or equal to b's
 	a <= returns true if a's value is less then or equal to b's
 
+	//you can now add voids that take in varibles you call them like so
+	add.start(5, 20)
+
 function2.end
+
+//you make them like so
+void add(test1, test2)
+	print(math(test1 + test2))
+add.end
 
 //expected output of this file is
 5
 10
+25
 hello!
 20

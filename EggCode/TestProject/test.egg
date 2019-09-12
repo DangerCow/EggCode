@@ -1,3 +1,9 @@
 ﻿func start
-	print(input(":"))
+	(private)a = 5
+	print(a)
+	test.start
 start.end
+
+func test
+	print(a)
+test.end
