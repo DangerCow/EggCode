@@ -359,7 +359,7 @@ namespace DCS
                     //reparse the arguments so varibles and eaven the math command in the future can be passed
 
                     args[0] = (string)EggCodeParser.ParseInput(args[0]);
-                    args[2] = (string)EggCodeParser.ParseInput(args[2]);
+                     args[2] = (string)EggCodeParser.ParseInput(args[2]);
 
                     if (args[1] == "+")
                     { i_return = float.Parse(args[0]) + float.Parse(args[2]); }
