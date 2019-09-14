@@ -25,8 +25,5 @@ print("[string]") - returns [string]
 
 math([a] +,-,*,/ [b]) - returns [a] plus/minus/times/divided by [b]
 
-### Notes
-
-* if statments sadly can not contain other if statments
 
 # For more details about EggCode's syntax look in EggCode/samplecode.egg
