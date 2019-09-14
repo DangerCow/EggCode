@@ -1,9 +1,0 @@
-﻿func start
-	(private)a = 5
-	print(a)
-	test.start
-start.end
-
-func test
-	print(a)
-test.end

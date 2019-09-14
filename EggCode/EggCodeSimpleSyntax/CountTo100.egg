@@ -1,0 +1,10 @@
+﻿
+//declair varible i as 0 before program runs
+pre declair i as 0
+
+//loop over count to 100 until i is 100
+(loop condition) = (i == 100)
+func CountTo100
+	i = math(i + 1)
+	print(i)
+CountTo100.end

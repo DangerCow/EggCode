@@ -1,5 +1,0 @@
-﻿//add test.egg to be parse
-addFile(test.egg)
-
-//set test.egg to be the defualt file
-defualt = test.egg

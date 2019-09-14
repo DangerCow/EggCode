@@ -1,0 +1,30 @@
+﻿func start
+
+	//varibles:
+
+	//cast varibles as so
+	test = "hello!"
+	//or
+	number = 5
+
+	//output:
+
+	//just print like so
+	print(test)
+	//or
+	print("hi")
+
+	//user input:
+
+	//write "count to 100? y/n:" then store input into
+	//varible count
+	count = input("count to 100? y/n:")
+
+	//if statments:
+
+	//if count's value is "y" count to 100
+	//else then skip 1 line
+	if (count == "y") else (skip 1)
+		CountTo100.start
+
+start.end

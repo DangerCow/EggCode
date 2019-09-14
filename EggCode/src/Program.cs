@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using DCS;
 
-namespace Testing
+namespace demo
 {
-    class TestingProgram
+    class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
-            EggCode.Run("TestProject", EggCode.CodeType.Project);
+            EggCode.Run("sampleCode.egg", EggCode.CodeType.File);
             Console.ReadLine();
         }
     }

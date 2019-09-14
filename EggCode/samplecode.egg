@@ -1,4 +1,4 @@
-﻿//lines starting with "//" (comments) will not be parsed
+﻿﻿//lines starting with "//" (comments) will not be parsed
 
 //when you have a function called start the program will run it when ready
 
@@ -56,6 +56,8 @@ func function2
 	//you can now add voids that take in varibles you call them like so
 	add.start(5, 20)
 
+	loops.start
+
 function2.end
 
 //you make them like so
@@ -63,9 +65,31 @@ void add(test1, test2)
 	print(math(test1 + test2))
 add.end
 
+//you can declair a varible before the program runs like so:
+pre declair i as 0
+
+//you can also loop a function by puting the (loop forever) or (loop condition) = (i == 100) tags above the function call
+//this one will loop until i = 10
+
+(loop condition) = (i == 10)
+func loops
+	i = math(i + 1)
+	print(i)
+loops.end
+
 //expected output of this file is
 5
 10
 25
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
 hello!
 20

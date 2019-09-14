@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
+using System.Windows.Forms;
 using DCS.Util;
 
 namespace DCS
@@ -137,6 +139,14 @@ namespace DCS
 
         private static void FindVoids(string line, int i, string[] lines, bool DefaultFile)
         {
+            if (line.StartsWith("pre declair"))
+            {
+                string[] args = line.Replace("pre declair ", "").StringSplit(" as ");
+
+                EggCodeTypeVarible var = new EggCodeTypeVarible(args[0], args[1]);
+                eggCodeGlobalVaribles.Add(var);
+            }
+
             if (line.StartsWith("func") && !line.EndsWith(".start") && !line.EndsWith(".end"))
             {
                 EggCodeTypeVoid TempVoid = new EggCodeTypeVoid
@@ -144,6 +154,16 @@ namespace DCS
                     name = line.StringSplit("func ")[1]
                 };
                 TempVoid.Start(i);
+
+                try {
+                    if (lines[i - 1] == "(loop forever)") { TempVoid.LoopForever = true; }
+                    else if (lines[i - 1].StartsWith("(loop condition)"))
+                    {
+                        TempVoid.LoopConditionTag = true;
+                        TempVoid.LoopCondition = lines[i - 1].StringSplit(" = ")[1].AdvancedBetween('(', ')');
+                    }
+                }
+                catch { }
 
                 if (DefaultFile && TempVoid.name == "start")
                 {
@@ -182,11 +202,13 @@ namespace DCS
 
             public static void ParseLine(string line)
             {
+
                 if (line.StartsWith("print")) { EggCodeCommands.Print(line); }
                 else if (line.EndsWith(".start")) { EggCodeCommands.StartFunc(line); }
                 else if (line.Contains(".start") && line.EndsWith(")")) { EggCodeCommands.StartFuncWithPrams(line); }
                 else if (line.StartsWith("skip")) { EggCodeCommands.Skip(line); }
                 else if (line.StartsWith("input")) { EggCodeCommands.Input(line); }
+                else if (line == "clearScreen") { Console.Clear(); }
 
                 else if (line.StartsWith("if"))
                 {
@@ -250,8 +272,6 @@ namespace DCS
 
             public static bool Eval(string flag)
             {
-                try
-                {
                     string[] args = flag.Split(' ');
 
                     if (args[1] == "==")
@@ -276,12 +296,6 @@ namespace DCS
                     }
 
                     return false;
-                }
-
-                catch
-                {
-                    throw new Exception("If statment not correct format");
-                }
             }
         }
 
@@ -311,6 +325,7 @@ namespace DCS
                     }
                 }
             }
+
             public static void Skip(string line)
             {
                 int skipAmount = int.Parse(line.StringSplit("skip ")[1]);
@@ -436,6 +451,10 @@ namespace DCS
             public void StartWithPrams(int i, string pram) { start = i; prams_string = pram; }
             public void End(int i) { end = i; }
 
+            public bool LoopForever = false;
+            public bool LoopConditionTag = false;
+            public string LoopCondition;
+
             //get lines of code inbetween start and end then save them to code
 
             public void Create(string[] lines) { int i = start; while (i < end) { code.Add(lines[i]); i += 1; } }
@@ -478,6 +497,9 @@ namespace DCS
                     if (EggCodeParser.skip == 0) { EggCodeParser.ParseLine(line); }
                     else if (EggCodeParser.skip != 0) { EggCodeParser.skip -= 1; }
                 }
+
+                if (LoopForever){ Run(); }
+                else if (LoopConditionTag && !EggCodeParser.Eval(LoopCondition)) { Run(); }
             }
             public void RunWithPrams(string pramCalls)
             {
@@ -500,6 +522,9 @@ namespace DCS
                     if (EggCodeParser.skip == 0) { EggCodeParser.ParseLine(line); }
                     else if (EggCodeParser.skip != 0) { EggCodeParser.skip -= 1; }
                 }
+
+                if (LoopForever) { Run(); }
+                else if (LoopConditionTag && !EggCodeParser.Eval(LoopCondition)) { Run(); }
             }
         }
     }

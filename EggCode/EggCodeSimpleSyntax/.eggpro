@@ -1,0 +1,7 @@
+﻿//add main.egg to be parsed in the project
+addFile(main.egg)
+
+addFile(CountTo100.egg)
+
+//make main.egg the main file
+defualt = main.egg
