@@ -1,27 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
-using System.Threading;
-using System.Windows.Forms;
 using DCS.Util;
 
 namespace DCS
 {
     class EggCode
     {
-        public enum CodeType { Project, File };
+        public enum RunAction { RunProject, RunFile, ConvertProjectToFile };
         private static List<EggCodeTypeVoid> eggCodeVoids = new List<EggCodeTypeVoid>();
         private static List<EggCodeTypeVarible> eggCodeGlobalVaribles = new List<EggCodeTypeVarible>();
         private static EggCodeTypeVoid startVoid = null;
 
         private static EggCodeTypeVoid CurrentlyRunning = null;
 
-        public static void Run(string file, CodeType codeType)
+        public static void Run(string file, RunAction runAction)
         {
             string filePath = AppDomain.CurrentDomain.BaseDirectory + file;
 
-            if(codeType == CodeType.Project) { RunProject(file, filePath); }
-            else if (codeType == CodeType.File) { RunFile(file, filePath); }
+            if(runAction == RunAction.RunProject) { RunProject(file, filePath); }
+            else if (runAction == RunAction.RunFile) { RunFile(file, filePath); }
+            else if (runAction == RunAction.ConvertProjectToFile) { ProjectToFile(file, filePath); }
         }
 
         private static void RunFile(string file, string fullPath)
@@ -135,6 +135,50 @@ namespace DCS
             if (startVoid == null) { throw new Exception("The defualt file dose not contain a start functtion"); }
 
             startVoid.Run();
+        }
+
+        private static void ProjectToFile(string file, string fullPath)
+        {
+            DirectoryInfo d = new DirectoryInfo(fullPath);
+            List<string> files = new List<string>();
+
+            List<string> final = new List<string>();
+
+            //get project settings
+            foreach (var f in d.GetFiles("*"))
+            {
+                if (f.Name == ".eggpro")
+                {
+                    string[] lines = File.ReadAllLines(f.FullName);
+                    foreach(string line in lines)
+                    {
+                        if (line.StartsWith("addFile"))
+                        {
+                            files.Add(line.AdvancedBetween('(', ')'));
+                        }
+                    }
+                }
+            }
+
+            //add all lines in every file to the final output
+            foreach(string f in files)
+            {
+                string[] lines = File.ReadAllLines(fullPath + "\\" + f);
+
+                foreach(string line in lines)
+                {
+                    final.Add(line);
+                }
+            }
+
+            try
+            {
+                File.WriteAllLines("output.egg", final.ToArray());
+                Console.WriteLine("file sucsessfully converted!");
+            } catch (Exception e)
+            {
+                Console.WriteLine("error converting file: " + e);
+            }
         }
 
         private static void FindVoids(string line, int i, string[] lines, bool DefaultFile)
@@ -568,5 +612,16 @@ namespace DCS.Util
 
             return final;
         }
+
+        public static void PrintArray(this string[] list)
+        {
+            foreach (string line in list) { Console.WriteLine(line); }
+        }
+
+        public static void PrintList(this List<string> list)
+        {
+            foreach (string line in list) { Console.WriteLine(line); }
+        }
     }
 }
+

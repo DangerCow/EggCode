@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DCS;
 
 namespace demo
@@ -11,7 +7,7 @@ namespace demo
     {
         public static void Main(string[] args)
         {
-            EggCode.Run("sampleCode.egg", EggCode.CodeType.File);
+            EggCode.Run("EggCodeSimpleSyntax", EggCode.RunAction.ConvertProjectToFile);
             Console.ReadLine();
         }
     }

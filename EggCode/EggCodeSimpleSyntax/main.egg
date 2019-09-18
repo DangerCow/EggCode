@@ -11,8 +11,6 @@
 
 	//just print like so
 	print(test)
-	//or
-	print("hi")
 
 	//user input:
 
